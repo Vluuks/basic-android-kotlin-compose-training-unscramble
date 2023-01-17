@@ -52,7 +52,9 @@ import com.example.android.unscramble.ui.theme.UnscrambleTheme
 @Composable
 fun GameScreen(
     modifier: Modifier = Modifier,
-    gameViewModel: GameViewModel = viewModel()
+    gameViewModel: GameViewModel = viewModel(),
+    onUserGuessChanged: (String) -> Unit,
+    onUserGuessDone: () -> Unit
 ) {
     val gameUiState by gameViewModel.uiState.collectAsState()
 
@@ -64,7 +66,7 @@ fun GameScreen(
     ) {
 
         GameStatus()
-        GameLayout(gameUiState.currentScrambledWord)
+        GameLayout(gameUiState.currentScrambledWord, onUserGuessChanged = onUserGuessChanged, onUserGuessDone = onUserGuessDone)
         Row(
             modifier = modifier
                 .fillMaxWidth()
@@ -118,7 +120,10 @@ fun GameStatus(modifier: Modifier = Modifier) {
 @Composable
 fun GameLayout(
     currentScrambledWorld: String,
-    modifier: Modifier = Modifier) {
+    modifier: Modifier = Modifier,
+    onUserGuessChanged: (String) -> Unit,
+    onUserGuessDone: () -> Unit
+) {
     Column(
         verticalArrangement = Arrangement.spacedBy(24.dp),
 
@@ -137,14 +142,14 @@ fun GameLayout(
             value = "",
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
-            onValueChange = { },
+            onValueChange = onUserGuessChanged,
             label = { Text(stringResource(R.string.enter_your_word)) },
             isError = false,
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done
             ),
             keyboardActions = KeyboardActions(
-                onDone = { }
+                onDone = { onUserGuessDone() }
             ),
         )
     }
@@ -192,6 +197,6 @@ private fun FinalScoreDialog(
 @Composable
 fun DefaultPreview() {
     UnscrambleTheme {
-        GameScreen()
+        GameScreen(onUserGuessChanged = {}, onUserGuessDone = {})
     }
 }
