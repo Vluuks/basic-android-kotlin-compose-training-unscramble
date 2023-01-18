@@ -68,7 +68,7 @@ fun GameScreen(
             gameUiState.currentScrambledWord,
             userGuess = gameViewModel.userGuess,
             onUserGuessChanged = { gameViewModel.updateUserGuess(it) },
-            onUserGuessDone = {})
+            onUserGuessDone = { gameViewModel.checkUserGuess() })
         Row(
             modifier = modifier
                 .fillMaxWidth()
