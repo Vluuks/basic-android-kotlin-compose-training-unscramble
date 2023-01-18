@@ -66,7 +66,11 @@ fun GameScreen(
     ) {
 
         GameStatus()
-        GameLayout(gameUiState.currentScrambledWord, onUserGuessChanged = onUserGuessChanged, onUserGuessDone = onUserGuessDone)
+        GameLayout(
+            gameUiState.currentScrambledWord,
+            userGuess = gameViewModel.userGuess,
+            onUserGuessChanged = onUserGuessChanged,
+            onUserGuessDone = onUserGuessDone)
         Row(
             modifier = modifier
                 .fillMaxWidth()
@@ -120,10 +124,11 @@ fun GameStatus(modifier: Modifier = Modifier) {
 @Composable
 fun GameLayout(
     currentScrambledWorld: String,
-    modifier: Modifier = Modifier,
+    userGuess: String,
     onUserGuessChanged: (String) -> Unit,
-    onUserGuessDone: () -> Unit
-) {
+    onUserGuessDone: () -> Unit,
+    modifier: Modifier = Modifier
+    ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(24.dp),
 
@@ -139,7 +144,7 @@ fun GameLayout(
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
         OutlinedTextField(
-            value = "",
+            value = userGuess,
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
             onValueChange = onUserGuessChanged,
