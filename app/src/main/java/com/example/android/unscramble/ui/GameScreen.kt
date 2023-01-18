@@ -68,7 +68,9 @@ fun GameScreen(
             gameUiState.currentScrambledWord,
             userGuess = gameViewModel.userGuess,
             onUserGuessChanged = { gameViewModel.updateUserGuess(it) },
-            onUserGuessDone = { gameViewModel.checkUserGuess() })
+            onUserGuessDone = { gameViewModel.checkUserGuess() },
+            isGuessWrong = gameUiState.isGuessedWordWrong
+        )
         Row(
             modifier = modifier
                 .fillMaxWidth()
@@ -125,6 +127,7 @@ fun GameLayout(
     userGuess: String,
     onUserGuessChanged: (String) -> Unit,
     onUserGuessDone: () -> Unit,
+    isGuessWrong: Boolean,
     modifier: Modifier = Modifier
     ) {
     Column(
@@ -146,7 +149,13 @@ fun GameLayout(
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
             onValueChange = onUserGuessChanged,
-            label = { Text(stringResource(R.string.enter_your_word)) },
+            label = {
+                if (isGuessWrong) {
+                    Text(stringResource(R.string.wrong_guess))
+                } else {
+                    Text(stringResource(R.string.enter_your_word))
+                }
+            },
             isError = false,
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done
